@@ -1,6 +1,6 @@
 import { useState } from "react"
 import { pixabayApiKey } from "../secrets"
-import { PixabaySearchResultItem, PixabaySearchResults } from "../types"
+import { PixabaySearchResultItem, PixabayResponse } from "../types"
 import SearchResult from "../components/SearchResult"
 
 export default function SearchRoute() {
@@ -29,7 +29,7 @@ export default function SearchRoute() {
         const response = await fetch(url, {
             method: "GET",
         })
-        const results = await response.json() as PixabaySearchResults
+        const results = await response.json() as PixabayResponse
         setPixabayItems(results.hits)
     }
 

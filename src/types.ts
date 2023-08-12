@@ -1,4 +1,4 @@
-export interface PixabaySearchResults {
+export interface PixabayResponse {
     total: number
     totalHits: number
     hits: PixabaySearchResultItem[]
