@@ -1,6 +1,7 @@
 import { useState } from "react"
 import { pixabayApiKey } from "../secrets"
 import { PixabaySearchResultItem, PixabaySearchResults } from "../types"
+import SearchResult from "../components/SearchResult"
 
 export default function SearchRoute() {
 
@@ -32,6 +33,11 @@ export default function SearchRoute() {
         setPixabayItems(results.hits)
     }
 
+    const resultElements: JSX.Element[] = []
+    for (const pixabayItem of pixabayItems) {
+        resultElements.push(<SearchResult pixabayItem={pixabayItem} key={pixabayItem.id} />)
+    }
+
     return (
         <div>
             <div>
@@ -41,7 +47,7 @@ export default function SearchRoute() {
                 <button onClick={performSearch}>Search</button>
             </div>
             <div>
-                TODO: Search results
+                {resultElements}
             </div>
         </div>
     )
