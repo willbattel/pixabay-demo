@@ -1,9 +1,15 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
-import { PixabaySearchResultItem } from "../types";
+import { PixabayResponse, PixabaySearchResultItem } from "../types";
 
 interface State {
     pixabayItem: PixabaySearchResultItem
+
+    // Note: It may be better to use a tool like Redux to maintain 
+    // the app state rather than duplicating it, but this works fine
+    // for a project of this scope.
+    pixabayResponse: PixabayResponse
+    searchQuery: string
 }
 
 export default function DetailsRoute() {
@@ -11,17 +17,23 @@ export default function DetailsRoute() {
     const { state, pathname } = useLocation()
     const [ pixabayItem, setPixabayItem ] = useState<PixabaySearchResultItem | null>(null)
 
+    // See above note regarding application state management.
+    const pixabayResponse = useRef<PixabayResponse | null>(null)
+    const searchQuery = useRef<string | null>(null)
+
     const itemId = pathname.split("/")[1]
 
     useEffect(() => {
         if (state) {
-            const { pixabayItem } = state as State
-            if (pixabayItem.id.toString() === itemId) {
-                setPixabayItem(pixabayItem)
+            const _state = state as State
+            if (_state.pixabayItem.id.toString() === itemId) {
+                setPixabayItem(_state.pixabayItem)
             }
             else {
                 console.error("Pixabay item ID does not match that of pathname.")
             }
+            pixabayResponse.current = _state.pixabayResponse
+            searchQuery.current = _state.searchQuery
         }
         else {
             getPixabayItem()
@@ -33,7 +45,12 @@ export default function DetailsRoute() {
     }
 
     function backToSearch() {
-        navigate("/")
+        navigate("/", {
+            state: {
+                pixabayResponse: pixabayResponse.current,
+                searchQuery: searchQuery.current,
+            }
+        })
     }
 
     if (!pixabayItem) {
