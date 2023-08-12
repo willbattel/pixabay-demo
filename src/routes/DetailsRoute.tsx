@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
-import { PixabayResponse, PixabaySearchResultItem } from "../types";
+import { PixabaySearchResultItem } from "../types";
 
 interface State {
     pixabayItem: PixabaySearchResultItem
@@ -8,7 +8,7 @@ interface State {
     // Note: It may be better to use a tool like Redux to maintain 
     // the app state rather than duplicating it, but this works fine
     // for a project of this scope.
-    pixabayResponse: PixabayResponse
+    pixabayItems: PixabaySearchResultItem[]
     searchQuery: string
 }
 
@@ -18,7 +18,7 @@ export default function DetailsRoute() {
     const [ pixabayItem, setPixabayItem ] = useState<PixabaySearchResultItem | null>(null)
 
     // See above note regarding application state management.
-    const pixabayResponse = useRef<PixabayResponse | null>(null)
+    const pixabayItems = useRef<PixabaySearchResultItem[] | null>(null)
     const searchQuery = useRef<string | null>(null)
 
     const itemId = pathname.split("/")[1]
@@ -32,7 +32,7 @@ export default function DetailsRoute() {
             else {
                 console.error("Pixabay item ID does not match that of pathname.")
             }
-            pixabayResponse.current = _state.pixabayResponse
+            pixabayItems.current = _state.pixabayItems
             searchQuery.current = _state.searchQuery
         }
         else {
@@ -47,7 +47,7 @@ export default function DetailsRoute() {
     function backToSearch() {
         navigate("/", {
             state: {
-                pixabayResponse: pixabayResponse.current,
+                pixabayItems: pixabayItems.current,
                 searchQuery: searchQuery.current,
             }
         })
