@@ -18,7 +18,7 @@ export default function SearchRoute() {
             .replace(/[^a-z0-9áéíóúñü ]/gim, "")
             .split(" ")
             .filter(component => !!component)
-        
+
         // Ignore empty queries
         if (searchComponents.length < 1) {
             return
