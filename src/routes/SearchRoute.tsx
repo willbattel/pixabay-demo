@@ -1,6 +1,10 @@
+import { useState } from "react"
 import { pixabayApiKey } from "../secrets"
+import { PixabaySearchResultItem, PixabaySearchResults } from "../types"
 
 export default function SearchRoute() {
+
+    const [pixabayItems, setPixabayItems] = useState<PixabaySearchResultItem[]>([])
 
     async function performSearch() {
         // Get raw user input from form
@@ -21,8 +25,11 @@ export default function SearchRoute() {
 
         // Build URL and send request
         const url = `https://pixabay.com/api/?key=${pixabayApiKey}&q=${searchComponents.join("+")}&image_type=photo`
-
-        // TODO: Fetch
+        const response = await fetch(url, {
+            method: "GET",
+        })
+        const results = await response.json() as PixabaySearchResults
+        setPixabayItems(results.hits)
     }
 
     return (
