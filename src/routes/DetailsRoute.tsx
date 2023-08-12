@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { PixabaySearchResultItem } from "../types";
 
 interface State {
@@ -7,6 +7,7 @@ interface State {
 }
 
 export default function DetailsRoute() {
+    const navigate = useNavigate()
     const { state, pathname } = useLocation()
     const [ pixabayItem, setPixabayItem ] = useState<PixabaySearchResultItem | null>(null)
 
@@ -31,15 +32,24 @@ export default function DetailsRoute() {
         // TODO
     }
 
+    function backToSearch() {
+        navigate("/")
+    }
+
     if (!pixabayItem) {
         return (
-            <h2>Loading image details</h2>
+            <div>
+                <h2>Loading image details</h2>
+                <button onClick={backToSearch}>Back to search</button>
+            </div>
+            
         )
     }
 
     return (
         <div>
             <h2>Image details</h2>
+            <button onClick={backToSearch}>Back to search</button>
             <ul>
                 <li>User: {pixabayItem.user}</li>
                 <li>Tags: {pixabayItem.tags}</li>
