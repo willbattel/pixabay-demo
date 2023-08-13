@@ -80,6 +80,7 @@ export default function SearchRoute() {
             <div className={routeStyles.searchResultsContainer}>
                 {resultElements}
             </div>
+            <p>All search results are courtesy of <a href="https://pixabay.com">Pixabay</a> ❤️</p>
         </div>
     )
 }
