@@ -1,6 +1,7 @@
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
-import { PixabaySearchResultItem } from "../types";
+import { PixabayResponse, PixabaySearchResultItem } from "../types";
+import { pixabayApiKey } from "../secrets";
 
 interface State {
     pixabayItem: PixabaySearchResultItem
@@ -23,8 +24,33 @@ export default function DetailsRoute() {
 
     const itemId = pathname.split("/")[1]
 
+    const getPixabayItem = useCallback(async () => {
+        if (!itemId) {
+            console.error("Unable to determine the item ID.")
+            return
+        }
+        
+        // Build URL and send request
+        const url = `https://pixabay.com/api/?key=${pixabayApiKey}&id=${itemId}&image_type=photo`
+        const response = await fetch(url, {
+            method: "GET",
+        })
+        const results = await response.json() as PixabayResponse
+        const item = results.hits[0]
+
+        if (!item) {
+            // TODO: Render error
+            console.error("No images found with ID.")
+            return
+        }
+
+        // Re-render with item details
+        setPixabayItem(item)
+    }, [itemId])
+
     useEffect(() => {
         if (state) {
+            // Render the item details from the provided state
             const _state = state as State
             if (_state.pixabayItem.id.toString() === itemId) {
                 setPixabayItem(_state.pixabayItem)
@@ -36,13 +62,10 @@ export default function DetailsRoute() {
             searchQuery.current = _state.searchQuery
         }
         else {
+            // Fetch the item by ID
             getPixabayItem()
         }
-    }, [itemId, setPixabayItem, state])
-
-    function getPixabayItem() {
-        // TODO
-    }
+    }, [getPixabayItem, itemId, setPixabayItem, state])
 
     function backToSearch() {
         navigate("/", {
