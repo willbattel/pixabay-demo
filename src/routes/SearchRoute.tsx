@@ -4,6 +4,8 @@ import { PixabaySearchResultItem, PixabayResponse } from "../types"
 import SearchResult from "../components/SearchResult"
 import { useLocation, useNavigate } from "react-router-dom"
 
+import * as routeStyles from './SearchRoute.css'
+
 interface State {
     pixabayItems?: PixabaySearchResultItem[] | null
     searchQuery?: string | null
@@ -75,7 +77,7 @@ export default function SearchRoute() {
                 </form>
                 <button onClick={performSearch}>Search</button>
             </div>
-            <div>
+            <div className={routeStyles.searchResultsContainer}>
                 {resultElements}
             </div>
         </div>
