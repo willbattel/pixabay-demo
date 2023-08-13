@@ -14,6 +14,8 @@ export const pixabayApiKey = "YOUR-API-KEY-HERE"
 
 Using environment variables, other secret managers, or **keeping the key exclusively server-side altogether** would probably be best for a project of greater scope.
 
+Install the required dependencies with `npm install`, then run the Vite development server locally with `npm run dev`. Alternatively, you can build the project with `npm run build`, afterwhich you can find the output files in the `dist` directory. 
+
 ## Technologies Used
 
 - [React](https://react.dev)
